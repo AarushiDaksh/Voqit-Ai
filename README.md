@@ -25,7 +25,6 @@ Voqit-Ai is a smart AI-powered bot application designed to interact with users i
 - **React 
 - **Clerk.dev** for authentication
 - **OpenAI GPT / LangChain** (for AI bot logic)
-- **Node.js / Express** or **Discord.js** (for backend/bot logic)
 - **Tailwind CSS / NativeWind** for UI
 
 ---

@@ -158,57 +158,56 @@ function App() {
           </div>
         </header>
 
+<main className={`flex-grow px-4 py-6 space-y-6 overflow-y-auto ${isDarkMode ? "bg-[#181818]" : "bg-gray-50"} min-h-[calc(100vh-150px)]`}>
+  {chatHistory.map((chat, index) => (
+    <div
+      key={index}
+      className={`max-w-3xl mx-auto px-6 py-4 rounded-lg text-base leading-relaxed shadow-md transition-all duration-300 ${
+        chat.type === "question"
+          ? isDarkMode
+            ? "bg-[#1a1a1a] text-white text-right"
+            : "bg-pink-100 text-right"
+          : isDarkMode
+          ? "bg-[#1e1e1e] border border-blue-500 text-white"
+          : "bg-white border border-blue-500 text-left"
+      }`}
+    >
+      <ReactMarkdown
+        components={{
+          code({ children }) {
+            return (
+              <pre className={`rounded-md my-4 p-4 text-sm overflow-x-auto ${
+                isDarkMode ? "bg-[#0c0c0c] text-pink-300" : "bg-gray-100 text-pink-800"
+              }`}>
+                <code>{children}</code>
+              </pre>
+            );
+          },
+        }}
+      >
+        {chat.text}
+      </ReactMarkdown>
 
-        <main className={`flex-grow overflow-y-auto px-4 py-6 space-y-6 ${isDarkMode ? "bg-[#181818]" : "bg-gray-50"}`}>
-          {chatHistory.map((chat, index) => (
-            <div
-              key={index}
-              className={`max-w-3xl mx-auto px-6 py-4 rounded-lg text-base leading-relaxed shadow-md transition-all duration-300 ${
-                chat.type === "question"
-                  ? isDarkMode
-                    ? "bg-[#1a1a1a] text-white text-right"
-                    : "bg-pink-100 text-right"
-                  : isDarkMode
-                  ? "bg-[#1e1e1e] border border-blue-500 text-white"
-                  : "bg-white border border-blue-500 text-left"
-              }`}
-            >
-              <ReactMarkdown
-                components={{
-                  code({ node, inline, className, children }) {
-                    return (
-                      <pre className={`rounded-md my-4 p-4 text-sm overflow-x-auto ${
-                        isDarkMode ? "bg-[#0c0c0c] text-pink-300" : "bg-gray-100 text-pink-800"
-                      }`}>
-                        <code>{children}</code>
-                      </pre>
-                    );
-                  },
-                }}
-              >
-                {chat.text}
-              </ReactMarkdown>
-              {chat.type === "answer" && (
-                <div className="flex justify-end gap-2 mt-3">
-                  <button
-                    onClick={() => toggleSpeaking(chat.text)}
-                    className="text-pink-500 hover:text-pink-400"
-                  >
-                    <FaVolumeUp />
-                  </button>
-                  <ShareButtons answer={chat.text} />
-                </div>
-              )}
-            </div>
-          ))}
-          {generatingAnswer && (
-            <div className={`max-w-2xl mx-auto p-4 rounded-lg ${isDarkMode ? "bg-[#1e1e1e] border border-blue-500" : "bg-white border border-blue-500"} animate-pulse`}>
-              <div className="h-4 bg-gray-300 rounded w-3/4 mb-2"></div>
-              <div className="h-4 bg-gray-300 rounded w-2/3 mb-2"></div>
-              <div className="h-4 bg-gray-300 rounded w-1/2"></div>
-            </div>
-          )}
-        </main>
+      {chat.type === "answer" && (
+        <div className="flex justify-end gap-2 mt-3">
+          <button onClick={() => toggleSpeaking(chat.text)} className="text-pink-500 hover:text-pink-400">
+            <FaVolumeUp />
+          </button>
+          <ShareButtons answer={chat.text} />
+        </div>
+      )}
+    </div>
+  ))}
+
+  {generatingAnswer && (
+    <div className={`max-w-2xl mx-auto p-4 rounded-lg ${isDarkMode ? "bg-[#1e1e1e] border border-blue-500" : "bg-white border border-blue-500"} animate-pulse`}>
+      <div className="h-4 bg-gray-300 rounded w-3/4 mb-2"></div>
+      <div className="h-4 bg-gray-300 rounded w-2/3 mb-2"></div>
+      <div className="h-4 bg-gray-300 rounded w-1/2"></div>
+    </div>
+  )}
+</main>
+
 
         <form
           onSubmit={generateAnswer}
@@ -246,8 +245,6 @@ function App() {
             </div>
           </div>
         </form>
-
-        {/* <Footer /> */}
       </SignedIn>
     </div>
   );

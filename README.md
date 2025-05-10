@@ -15,7 +15,9 @@ Voqit-Ai is a smart AI-powered bot application designed to interact with users i
   <img src="https://github.com/user-attachments/assets/8c3deb76-b9f9-4d79-a901-c904ef2f77cf" width="300"/>
   <img src="https://github.com/user-attachments/assets/17359792-037f-4e6a-b2d6-30e43b12e2ef" width="300"/>
   <img src="https://github.com/user-attachments/assets/10a29b58-f1bf-4c66-a70a-3ad47073a982" width="300"/>
+  <img src="https://github.com/user-attachments/assets/4117e272-4755-4cc4-9de1-119d26ae5777" width="300"/>
 </p>
+
 
 
 ## ⚙️ Tech Stack

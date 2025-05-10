@@ -130,11 +130,11 @@ function App() {
   }
 
   return (
-    <div className={`flex flex-col min-h-screen font-sans transition-colors duration-300 ${isDarkMode ? "bg-[#111] text-gray-100" : "bg-white text-gray-900"}`}>
+    <div className={`flex flex-col min-h-screen font-sans transition-colors duration-300 bg-black`}>
       <SignedOut>
         <div className="flex flex-col items-center justify-center h-screen px-4 text-center">
           <h1 className="text-4xl font-bold text-pink-500 mb-6 animate-pulse">
-            Welcome to Voqit Gemini 🌠
+            Welcome to Voqit-Ai
           </h1>
           <SignInButton mode="modal">
             <button className="px-6 py-3 font-semibold text-white rounded-lg bg-pink-500 shadow-lg hover:scale-105 transition-all duration-300">
@@ -158,7 +158,9 @@ function App() {
           </div>
         </header>
 
-<main className={`flex-grow px-4 py-6 space-y-6 overflow-y-auto ${isDarkMode ? "bg-[#181818]" : "bg-gray-50"} min-h-[calc(100vh-150px)]`}>
+<main className={`flex-grow px-4 pt-6 pb-40 space-y-6 overflow-y-auto ${isDarkMode ? "bg-[#181818]" : "bg-gray-50"}`}>
+
+
   {chatHistory.map((chat, index) => (
     <div
       key={index}
@@ -208,43 +210,47 @@ function App() {
   )}
 </main>
 
+<form
+  onSubmit={generateAnswer}
+  className={`fixed bottom-0 left-0 w-full z-50 px-4 pt-3 pb-[calc(env(safe-area-inset-bottom,20px)+16px)] shadow-inner backdrop-blur-sm mb-50 `}
+  //   isDarkMode ? "bg-[#111]/80 border-t border-blue-500" : "bg-white/90 border-t border-blue-500"
+  
+>
 
-        <form
-          onSubmit={generateAnswer}
-          className={`flex items-center ${isDarkMode ? "bg-[#111] border-t border-blue-500" : "bg-white border-t border-blue-500"} p-4 justify-center`}
+  <div className="w-full flex flex-col sm:flex-row max-w-3xl mx-auto items-center gap-3 mb-24">
+    <textarea
+      required
+      className={`flex-grow rounded-lg px-4 py-3 min-h-[56px] resize-none focus:outline-none focus:ring-2 focus:ring-pink-500 w-full sm:w-auto ${
+        isDarkMode ? "bg-[#1c1c1c] text-white" : "bg-gray-100 text-gray-900"
+      }`}
+      value={question}
+      onChange={(e) => setQuestion(e.target.value)}
+      placeholder="Ask anything..."
+    />
+    <div className="flex items-center space-x-2">
+      {recognition && (
+        <button
+          type="button"
+          onClick={toggleListening}
+          className={`p-3 rounded-full transition ${
+            isListening ? "bg-red-500" : "bg-pink-500"
+          } hover:scale-105 text-white`}
         >
-          <div className="flex w-full max-w-screen-md items-center">
-            <textarea
-              required
-              className={`flex-grow rounded-lg px-4 py-3 h-14 resize-none focus:outline-none focus:ring-2 focus:ring-pink-500 ${
-                isDarkMode ? "bg-[#1c1c1c] text-white" : "bg-gray-100 text-gray-900"
-              }`}
-              value={question}
-              onChange={(e) => setQuestion(e.target.value)}
-              placeholder="Ask anything..."
-            />
-            <div className="flex items-center space-x-3 ml-4">
-              {recognition && (
-                <button
-                  type="button"
-                  onClick={toggleListening}
-                  className={`p-3 rounded-full transition ${
-                    isListening ? "bg-red-500" : "bg-pink-500"
-                  } hover:scale-105 text-white`}
-                >
-                  <FaMicrophone />
-                </button>
-              )}
-              <button
-                type="submit"
-                className="p-3 rounded-full bg-pink-500 hover:bg-pink-600 shadow-lg text-white"
-                disabled={generatingAnswer}
-              >
-                <FaPaperPlane className={`${generatingAnswer ? "animate-pulse" : ""}`} />
-              </button>
-            </div>
-          </div>
-        </form>
+          <FaMicrophone />
+        </button>
+      )}
+      <button
+        type="submit"
+        className="p-3 rounded-full bg-pink-500 hover:bg-pink-600 shadow-lg text-white"
+        disabled={generatingAnswer}
+      >
+        <FaPaperPlane className={`${generatingAnswer ? "animate-pulse" : ""}`} />
+      </button>
+    </div>
+  </div>
+</form>
+
+
       </SignedIn>
     </div>
   );

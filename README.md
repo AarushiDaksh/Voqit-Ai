@@ -35,5 +35,5 @@ Voqit-Ai is a smart AI-powered bot application designed to interact with users i
 git clone https://github.com/AarushiDaksh/Voqit-Ai.git
 cd Voqit-Ai
 npm install
-npm start
+npm run dev
 

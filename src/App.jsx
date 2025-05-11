@@ -15,13 +15,7 @@ import {
   useUser,
 } from "@clerk/clerk-react";
 
- <TextareaAutosize
-  minRows={1}
-  maxRows={6}
-  className="..."
-  value={question}
-  onChange={(e) => setQuestion(e.target.value)}
-/> 
+
 const cache = new Map();
 
 function App() {
@@ -156,7 +150,7 @@ function App() {
         <header className={`p-4 shadow-sm border-b border-blue-500 ${isDarkMode ? "bg-[#111]" : "bg-white"} flex justify-between items-center`}>
           <h1 className="text-xl font-bold text-pink-500">Hello, {user?.firstName || "User"} 👋</h1>
           <div className="flex items-center space-x-4">
-            <a href="https://github.com/aarushidaksh" target="_blank" rel="noopener noreferrer" className="text-xl text-pink-400  hover:text-pink-300">
+            <a href="https://github.com/aarushidaksh" target="_blank" rel="noopener noreferrer" className="text-2xl text-pink-500  hover:text-pink-300">
               <FaGithub />
             </a>
             <button onClick={toggleTheme} className="text-xl">
@@ -165,76 +159,68 @@ function App() {
             <UserButton afterSignOutUrl="/" />
           </div>
         </header>
+<main className={`flex-grow overflow-y-auto px-4 pt-4 pb-32 ${isDarkMode ? "bg-[#181818]" : "bg-gray-50"}`}>
+  <div className="max-w-3xl mx-auto space-y-6">
+    {chatHistory.map((chat, index) => (
+          <div
+          key={index}
+          className={`px-6 py-4 rounded-lg text-base leading-relaxed shadow-md transition-all duration-300 ${
+            chat.type === "question"
+              ? isDarkMode
+                ? "bg-[#1a1a1a] text-white text-right"
+                : "bg-pink-100 text-gray-900 text-right"
+              : isDarkMode
+              ? "bg-[#1e1e1e] border border-blue-500 text-white"
+              : "bg-white border border-blue-500 text-gray-900"
+          }`}
+        >
 
-<main className={`flex-grow px-4 pt-6 pb-[150px] space-y-6 overflow-y-auto ${isDarkMode ? "bg-[#181818]" : "bg-gray-50"}`}>
+        <ReactMarkdown>{chat.text}</ReactMarkdown>
+        {chat.type === "answer" && (
+          <div className="flex justify-end gap-2 mt-3">
+            <button onClick={() => toggleSpeaking(chat.text)} className="text-pink-500 hover:text-pink-400">
+              <FaVolumeUp />
+            </button>
+           <ShareButtons answer={chat.text} isDarkMode={isDarkMode} />
 
+          </div>
+        )}
+      </div>
+    ))}
 
-
-  {chatHistory.map((chat, index) => (
-    <div
-      key={index}
-      className={`max-w-3xl mx-auto px-6 py-4 rounded-lg text-base leading-relaxed shadow-md transition-all duration-300 ${
-        chat.type === "question"
-          ? isDarkMode
-            ? "bg-[#1a1a1a] text-white text-right"
-            : "bg-pink-100 text-right"
-          : isDarkMode
-          ? "bg-[#1e1e1e] border border-blue-500 text-white"
-          : "bg-white border border-blue-500 text-left"
-      }`}
-    >
-      <ReactMarkdown
-        components={{
-          code({ children }) {
-            return (
-              <pre className={`rounded-md my-4 p-4 text-sm overflow-x-auto ${
-                isDarkMode ? "bg-[#0c0c0c] text-pink-300" : "bg-gray-100 text-pink-800"
-              }`}>
-                <code>{children}</code>
-              </pre>
-            );
-          },
-        }}
-      >
-        {chat.text}
-      </ReactMarkdown>
-
-      {chat.type === "answer" && (
-        <div className="flex justify-end gap-2 mt-3">
-          <button onClick={() => toggleSpeaking(chat.text)} className="text-pink-500 hover:text-pink-400">
-            <FaVolumeUp />
-          </button>
-          <ShareButtons answer={chat.text} />
-        </div>
-      )}
-    </div>
-  ))}
-
-  {generatingAnswer && (
-    <div className={`max-w-2xl mx-auto p-4 rounded-lg ${isDarkMode ? "bg-[#1e1e1e] border border-blue-500" : "bg-white border border-blue-500"} animate-pulse`}>
-      <div className="h-4 bg-gray-300 rounded w-3/4 mb-2"></div>
-      <div className="h-4 bg-gray-300 rounded w-2/3 mb-2"></div>
-      <div className="h-4 bg-gray-300 rounded w-1/2"></div>
-    </div>
-  )}
+    {generatingAnswer && (
+      <div className={`p-4 rounded-lg ${isDarkMode ? "bg-[#1e1e1e] border border-blue-500" : "bg-white border border-blue-500"} animate-pulse`}>
+        <div className="h-4 bg-gray-300 rounded w-3/4 mb-2"></div>
+        <div className="h-4 bg-gray-300 rounded w-2/3 mb-2"></div>
+        <div className="h-4 bg-gray-300 rounded w-1/2"></div>
+      </div>
+    )}
+  </div>
 </main>
 
 <form
   onSubmit={generateAnswer}
-  className={`fixed bottom-0 left-0 w-full z-50 border-t backdrop-blur-md ${isDarkMode ? "bg-[#111]/80 border-blue-500" : "bg-white/90 border-blue-300"}`}
+  className={`fixed bottom-0 left-0 w-full z-50 border-t ${
+    isDarkMode ? "bg-[#111]/90 border-blue-500" : "bg-white/95 border-gray-300"
+  }`}
 >
+
   <div className="max-w-3xl mx-auto w-full px-4 py-3 flex items-center space-x-2">
     <div className="relative flex-grow">
-      <textarea
-        rows={1}
+      <TextareaAutosize
+        minRows={1}
+        maxRows={6}
         required
         value={question}
         onChange={(e) => setQuestion(e.target.value)}
         placeholder="Ask anything..."
         className={`w-full pr-20 pl-4 py-3 rounded-2xl resize-none shadow-md focus:outline-none focus:ring-2 focus:ring-pink-500 ${
-          isDarkMode ? "bg-[#1c1c1c] text-white" : "bg-gray-100 text-gray-900"
+          isDarkMode ? "bg-[#1c1c1c] text-white" : "bg-gray-100 text-gray-900" 
+         
         }`}
+
       />
+
       <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex items-center space-x-2">
         {recognition && (
           <button
@@ -258,6 +244,7 @@ function App() {
     </div>
   </div>
 </form>
+
 
 
 

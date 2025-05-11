@@ -1,7 +1,7 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
 
-const ShareButtons = ({ answer }) => {
+const ShareButtons = ({ answer, isDarkMode }) => {
   const [copySuccess, setCopySuccess] = useState(false);
 
   const handleCopy = async () => {
@@ -38,11 +38,15 @@ const ShareButtons = ({ answer }) => {
     }
   };
 
+  const buttonClasses = isDarkMode
+    ? "bg-gray-700 hover:bg-gray-600 text-white"
+    : "bg-gray-100 hover:bg-gray-200 text-gray-800 border border-gray-300";
+
   return (
     <div className="flex gap-2 justify-end mt-2">
       <button
         onClick={handleCopy}
-        className="flex items-center gap-2 px-3 py-1 text-sm bg-gray-700 hover:bg-gray-600 rounded-md transition-colors"
+        className={`flex items-center gap-2 px-3 py-1 text-sm rounded-md transition-colors ${buttonClasses}`}
         title="Copy response"
       >
         <svg
@@ -64,7 +68,7 @@ const ShareButtons = ({ answer }) => {
 
       <button
         onClick={handleShare}
-        className="flex items-center gap-2 px-3 py-1 text-sm bg-gray-700 hover:bg-gray-600 rounded-md transition-colors"
+        className={`flex items-center gap-2 px-3 py-1 text-sm rounded-md transition-colors ${buttonClasses}`}
         title="Share response"
       >
         <svg
@@ -89,6 +93,7 @@ const ShareButtons = ({ answer }) => {
 
 ShareButtons.propTypes = {
   answer: PropTypes.string.isRequired,
+  isDarkMode: PropTypes.bool.isRequired,
 };
 
 export default ShareButtons;

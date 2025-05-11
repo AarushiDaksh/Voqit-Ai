@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import "./App.css";
 import axios from "axios";
+import TextareaAutosize from 'react-textarea-autosize';
 import ReactMarkdown from "react-markdown";
 import { FaMicrophone, FaPaperPlane, FaVolumeUp, FaMoon, FaSun, FaGithub } from "react-icons/fa";
 import ShareButtons from "./components/ShareButtons";
@@ -14,6 +15,13 @@ import {
   useUser,
 } from "@clerk/clerk-react";
 
+ <TextareaAutosize
+  minRows={1}
+  maxRows={6}
+  className="..."
+  value={question}
+  onChange={(e) => setQuestion(e.target.value)}
+/> 
 const cache = new Map();
 
 function App() {
@@ -213,45 +221,44 @@ function App() {
 
 <form
   onSubmit={generateAnswer}
- className="fixed bottom-0 left-0 w-full z-50 px-4 pt-3 pb-[env(safe-area-inset-bottom,20px)] shadow-inner backdrop-blur-sm bg-white dark:bg-[#111]/80 border-t border-blue-500"
-
-  //   isDarkMode ? "bg-[#111]/80 border-t border-blue-500" : "bg-white/90 border-t border-blue-500"
-  
+  className={`fixed bottom-0 left-0 w-full z-50 border-t backdrop-blur-md ${isDarkMode ? "bg-[#111]/80 border-blue-500" : "bg-white/90 border-blue-300"}`}
 >
-
- <div className="w-full flex flex-col sm:flex-row max-w-3xl mx-auto items-center gap-3">
-
-    <textarea
-      required
-      className={`flex-grow rounded-lg px-4 py-3 min-h-[56px] resize-none focus:outline-none focus:ring-2 focus:ring-pink-500 w-full sm:w-auto ${
-        isDarkMode ? "bg-[#1c1c1c] text-white" : "bg-gray-100 text-gray-900"
-      }`}
-      value={question}
-      onChange={(e) => setQuestion(e.target.value)}
-      placeholder="Ask anything..."
-    />
-    <div className="flex items-center space-x-2">
-      {recognition && (
+  <div className="max-w-3xl mx-auto w-full px-4 py-3 flex items-center space-x-2">
+    <div className="relative flex-grow">
+      <textarea
+        rows={1}
+        required
+        value={question}
+        onChange={(e) => setQuestion(e.target.value)}
+        placeholder="Ask anything..."
+        className={`w-full pr-20 pl-4 py-3 rounded-2xl resize-none shadow-md focus:outline-none focus:ring-2 focus:ring-pink-500 ${
+          isDarkMode ? "bg-[#1c1c1c] text-white" : "bg-gray-100 text-gray-900"
+        }`}
+      />
+      <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex items-center space-x-2">
+        {recognition && (
+          <button
+            type="button"
+            onClick={toggleListening}
+            className={`p-2 rounded-full transition ${
+              isListening ? "bg-red-500" : "bg-pink-500"
+            } hover:scale-105 text-white`}
+          >
+            <FaMicrophone size={14} />
+          </button>
+        )}
         <button
-          type="button"
-          onClick={toggleListening}
-          className={`p-3 rounded-full transition ${
-            isListening ? "bg-red-500" : "bg-pink-500"
-          } hover:scale-105 text-white`}
+          type="submit"
+          disabled={generatingAnswer}
+          className="p-2 rounded-full bg-pink-500 hover:bg-pink-600 shadow text-white"
         >
-          <FaMicrophone />
+          <FaPaperPlane size={14} className={generatingAnswer ? "animate-pulse" : ""} />
         </button>
-      )}
-      <button
-        type="submit"
-        className="p-3 rounded-full bg-pink-500 hover:bg-pink-600 shadow-lg text-white"
-        disabled={generatingAnswer}
-      >
-        <FaPaperPlane className={`${generatingAnswer ? "animate-pulse" : ""}`} />
-      </button>
+      </div>
     </div>
   </div>
 </form>
+
 
 
       </SignedIn>

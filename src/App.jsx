@@ -217,7 +217,7 @@ function App() {
   
 >
 
-  <div className="w-full flex flex-col sm:flex-row max-w-3xl mx-auto items-center gap-3 mb-24">
+  <div className="w-full flex flex-col sm:flex-row max-w-3xl mx-auto items-center gap-3 mb-10">
     <textarea
       required
       className={`flex-grow rounded-lg px-4 py-3 min-h-[56px] resize-none focus:outline-none focus:ring-2 focus:ring-pink-500 w-full sm:w-auto ${

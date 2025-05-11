@@ -1,4 +1,4 @@
-// Enhanced Gemini-style Chat UI with modern footer and layout refinements
+// Enhanced Gemini-style Chat UI with modern footer and welcome screen
 import { useState, useEffect } from "react";
 import "./App.css";
 import axios from "axios";
@@ -6,6 +6,8 @@ import TextareaAutosize from 'react-textarea-autosize';
 import ReactMarkdown from "react-markdown";
 import { FaMicrophone, FaPaperPlane, FaVolumeUp, FaMoon, FaSun, FaGithub } from "react-icons/fa";
 import ShareButtons from "./components/ShareButtons";
+import Lottie from "lottie-react";
+import voqitAnimation from "./assets/Animation.json";
 import {
   ClerkProvider,
   SignedIn,
@@ -13,8 +15,8 @@ import {
   SignInButton,
   UserButton,
   useUser,
+  RedirectToSignIn
 } from "@clerk/clerk-react";
-
 
 const cache = new Map();
 
@@ -98,55 +100,62 @@ function App() {
 
     const apiKey = import.meta.env.VITE_API_GENERATIVE_LANGUAGE_CLIENT;
 
-    let attempts = 0;
-    let delay = 2000;
-    while (attempts < 3) {
-      try {
-        const response = await axios.post(
-          `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
-          { contents: [{ parts: [{ text: question }] }] },
-          { headers: { "Content-Type": "application/json" } }
-        );
+    try {
+      const response = await axios.post(
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
+        { contents: [{ parts: [{ text: question }] }] },
+        { headers: { "Content-Type": "application/json" } }
+      );
 
-        const fullAnswer = response.data?.candidates?.[0]?.content?.parts?.[0]?.text;
-        if (!fullAnswer) throw new Error("Invalid response");
+      const fullAnswer = response.data?.candidates?.[0]?.content?.parts?.[0]?.text;
+      if (!fullAnswer) throw new Error("Invalid response");
 
-        cache.set(question, fullAnswer);
-        setChatHistory((prev) => [
-          ...prev,
-          { type: "question", text: question },
-          { type: "answer", text: fullAnswer },
-        ]);
-        setQuestion("");
-        break;
-      } catch (error) {
-        setChatHistory((prev) => [
-          ...prev,
-          { type: "answer", text: error.response?.status === 429 ? "Rate limit exceeded. Try again later." : "Error occurred. Try again." },
-        ]);
-        break;
-      }
+      cache.set(question, fullAnswer);
+      setChatHistory((prev) => [
+        ...prev,
+        { type: "question", text: question },
+        { type: "answer", text: fullAnswer },
+      ]);
+      setQuestion("");
+    } catch (error) {
+      setChatHistory((prev) => [
+        ...prev,
+        { type: "answer", text: error.response?.status === 429 ? "Rate limit exceeded. Try again later." : "Error occurred. Try again." },
+      ]);
     }
 
     setGeneratingAnswer(false);
   }
 
+
   return (
-    <div className={`flex flex-col min-h-screen font-sans transition-colors duration-300 bg-black`}>
+          <div className={`flex flex-col min-h-screen font-sans transition-colors duration-300 ${isDarkMode ? "bg-black text-white" : "bg-white text-black"}`}>
       <SignedOut>
-        <div className="flex flex-col items-center justify-center h-screen px-4 text-center">
-          <h1 className="text-4xl font-bold text-pink-500 mb-6 animate-pulse">
-            Welcome to Voqit-Ai
+        <div className="flex flex-col justify-center items-center min-h-screen bg-gradient-to-br from-[#1f1f2f] to-[#0c0c1a] text-white text-center px-6">
+        <Lottie
+          animationData={voqitAnimation}
+          loop
+          className="w-64 h-64 mb-6"
+        />
+
+
+          <h1 className="text-4xl font-extrabold mb-3 tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-purple-500">
+          Voqit Ask Anything. Get Instant Answers.
           </h1>
+          <p className="text-gray-300 max-w-md mb-6 text-base sm:text-lg">
+            Your personal AI assistant, powered by Gemini. Speak or type your thoughts — we’ll handle the rest.
+          </p>
           <SignInButton mode="modal">
-            <button className="px-6 py-3 font-semibold text-white rounded-lg bg-pink-500 shadow-lg hover:scale-105 transition-all duration-300">
-              Start Chatting
+            <button className="px-8 py-3 bg-pink-600 text-white rounded-full font-medium text-lg hover:bg-pink-700 transition-transform transform hover:scale-105 shadow-md">
+              Let’s Begin →
             </button>
           </SignInButton>
         </div>
       </SignedOut>
 
-      <SignedIn>
+
+
+     <SignedIn>
         <header className={`p-4 shadow-sm border-b border-blue-500 ${isDarkMode ? "bg-[#111]" : "bg-white"} flex justify-between items-center`}>
           <h1 className="text-xl font-bold text-pink-500">Hello, {user?.firstName || "User"} 👋</h1>
           <div className="flex items-center space-x-4">
@@ -175,7 +184,26 @@ function App() {
           }`}
         >
 
-        <ReactMarkdown>{chat.text}</ReactMarkdown>
+        <ReactMarkdown
+  components={{
+    code({ children }) {
+      return (
+        <pre
+          className={`rounded-md my-4 p-4 text-sm overflow-x-auto ${
+            isDarkMode
+              ? "bg-[#0c0c0c] text-pink-300"
+              : "bg-gray-100 text-pink-800"
+          }`}
+          style={{ wordWrap: "break-word", whiteSpace: "pre" }}
+        >
+          <code className="break-words">{children}</code>
+        </pre>
+      );
+    },
+  }}
+>
+  {chat.text}
+</ReactMarkdown>
         {chat.type === "answer" && (
           <div className="flex justify-end gap-2 mt-3">
             <button onClick={() => toggleSpeaking(chat.text)} className="text-pink-500 hover:text-pink-400">

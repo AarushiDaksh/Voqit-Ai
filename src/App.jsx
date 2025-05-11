@@ -158,7 +158,8 @@ function App() {
           </div>
         </header>
 
-<main className={`flex-grow px-4 pt-6 pb-40 space-y-6 overflow-y-auto ${isDarkMode ? "bg-[#181818]" : "bg-gray-50"}`}>
+<main className={`flex-grow px-4 pt-6 pb-[150px] space-y-6 overflow-y-auto ${isDarkMode ? "bg-[#181818]" : "bg-gray-50"}`}>
+
 
 
   {chatHistory.map((chat, index) => (
@@ -212,12 +213,14 @@ function App() {
 
 <form
   onSubmit={generateAnswer}
-  className={`fixed bottom-0 left-0 w-full z-50 px-4 pt-3 pb-[calc(env(safe-area-inset-bottom,20px)+16px)] shadow-inner backdrop-blur-sm mb-50 `}
+ className="fixed bottom-0 left-0 w-full z-50 px-4 pt-3 pb-[env(safe-area-inset-bottom,20px)] shadow-inner backdrop-blur-sm bg-white dark:bg-[#111]/80 border-t border-blue-500"
+
   //   isDarkMode ? "bg-[#111]/80 border-t border-blue-500" : "bg-white/90 border-t border-blue-500"
   
 >
 
-  <div className="w-full flex flex-col sm:flex-row max-w-3xl mx-auto items-center gap-3 mb-10">
+ <div className="w-full flex flex-col sm:flex-row max-w-3xl mx-auto items-center gap-3">
+
     <textarea
       required
       className={`flex-grow rounded-lg px-4 py-3 min-h-[56px] resize-none focus:outline-none focus:ring-2 focus:ring-pink-500 w-full sm:w-auto ${

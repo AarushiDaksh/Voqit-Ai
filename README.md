@@ -30,4 +30,5 @@ git clone https://github.com/AarushiDaksh/Voqit-Ai.git
 cd Voqit-Ai
 npm install
 npm run dev
+..
 

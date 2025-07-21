@@ -1,6 +1,6 @@
 # 🤖 Voqit-Ai
 
-Voqit-Ai is a smart AI-powered bot application designed to interact with users in real-time. Whether integrated into Discord, web, or other platforms, Voqit-Ai leverages AI capabilities to assist, respond, and automate conversations effectively.
+Voqit-Ai is a smart AI-powered bot application designed to interact with users in real-time. Whether integrated into Discord, web, or other platforms, Voqit-Ai leverages AI capabilities to assist, respond, and automate conversations effectively
 <br>
 
 <img width="600" alt="image" src="https://github.com/user-attachments/assets/6f6895dc-ee70-44df-bd56-7ee958e3c45d" />
